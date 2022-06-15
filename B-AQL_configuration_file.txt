@@ -1,0 +1,97 @@
+# Configuration file for MgII_model.py 
+
+[Star and data properties]
+star name = B-AQL
+wavelength min = 2794.5
+wavelength max = 2796.5
+lsf path = /Users/aayoungb/Data/HST/etaTel/
+data path = /Users/aayoungb/Data/HST/HighRV_MgII/E230H_plots/potentially_usable/coadded_obsids/fresh_x1d_files/final_spectra/
+save path = /Users/aayoungb/Data/HST/HighRV_MgII/E230H_plots/potentially_usable/coadded_obsids/fresh_x1d_files/final_spectra/
+
+[Parameter hints]
+vs value = -100
+vs min = -300
+vs max = 300
+vs vary = True
+
+am value = -10.5
+am min = -16
+am max = -8
+am vary = True
+
+fw_L value = 30.
+fw_L min = 1.
+fw_L max = 200.
+fw_L vary = True
+
+fw_G value = 50
+fw_G min = 1.
+fw_G max = 200.
+fw_G vary = True
+
+p value = 2.5
+p min = 0
+p max = 4
+p vary = True
+
+vs_rev value = 0.5
+vs_rev min = -5
+vs_rev max = 5
+vs_rev vary = True
+
+mg2_col value = 14
+mg2_col min = 12
+mg2_col max = 17
+mg2_col vary = True
+
+mg2_b value = 2.5
+mg2_b min = 1.0
+mg2_b max = 7
+mg2_b vary = True
+
+mg2_vel value = -25
+mg2_vel min = -50
+mg2_vel max = 50
+mg2_vel vary = True
+
+mg2_col2 value = 0
+mg2_col2 min = 0
+mg2_col2 max = 15
+mg2_col2 vary = False
+
+mg2_b2 value = 2.5
+mg2_b2 min = 0.5
+mg2_b2 max = 5
+mg2_b2 vary = False
+
+mg2_vel2 value = 0
+mg2_vel2 min = -50
+mg2_vel2 max = 50
+mg2_vel2 vary = False
+
+c0 value = 0
+c0 min = -1e-10
+c0 max = 1e-10
+c0 vary = True
+
+c1 value = 0
+c1 min = -1e-10
+c1 max = 1e-10
+c1 vary = True
+
+c2 value = 0
+c2 min = -1e-10
+c2 max = 1e-10
+c2 vary = False
+
+c3 value = 0
+c3 min = -1e-13
+c3 max = 1e-13
+c3 vary = False
+
+c4 value = 0
+c4 min = -1e-13
+c4 max = 1e-13
+c4 vary = False
+
+
