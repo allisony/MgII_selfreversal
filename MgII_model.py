@@ -56,7 +56,7 @@ def main(config_filename,fitting=True):
         result = model.fit(flux_array, wavelength_array=wavelength_array, weights=1./error_array)
         print(result.fit_report())
 
-        make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile,result)
+        make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile)
 
         make_and_save_fit_figure(wavelength_array,flux_array,error_array,result)
 
@@ -67,7 +67,7 @@ def main(config_filename,fitting=True):
 
     else:
 
-        make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile,result)
+        make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile)
 
         return
 
@@ -179,13 +179,12 @@ def read_data():
 
     return wavelength_array, flux_array, error_array
 
-def make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile,result):
+def make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile):
     star_name = config['Star and data properties'].get('star name')
 
     plt.figure()
     plt.errorbar(wavelength_array,flux_array,yerr=error_array,color='k',label='data')
     plt.plot(wavelength_array,initial_model_profile,color='gray',linestyle='--')
-    plt.plot(wavelength_array, result.best_fit, color='deeppink')
     plt.title('Diagnostic fit plot for ' + star_name, fontsize=18)
     plt.xlabel('Wavelength (A)',fontsize=18)
     plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
