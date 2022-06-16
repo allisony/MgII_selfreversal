@@ -33,7 +33,7 @@ rc('text', usetex=True)
 
 rc('text.latex', preamble=r'\usepackage[helvet]{sfmath}')
 
-def main(config_filename,fitting=True):
+def main(config_filename):
 
     global config
     config = load_config_file(config_filename)
@@ -50,28 +50,18 @@ def main(config_filename,fitting=True):
     ## evaluate initial model
     initial_model_profile = model.eval(params, wavelength_array=wavelength_array)
 
-    if fitting:
+    ## perform the fit
+    result = model.fit(flux_array, wavelength_array=wavelength_array, weights=1./error_array)
+    print(result.fit_report())
 
-        ## perform the fit
-        result = model.fit(flux_array, wavelength_array=wavelength_array, weights=1./error_array)
-        print(result.fit_report())
+    make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile,result)
 
-        make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile,result)
+    make_and_save_fit_figure(wavelength_array,flux_array,error_array,result)
 
-        make_and_save_fit_figure(wavelength_array,flux_array,error_array,result)
-
-        save_fit_results(wavelength_array, flux_array, error_array, result)
+    save_fit_results(wavelength_array, flux_array, error_array, result)
 
 
-        return
-
-    else:
-
-        make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile,result)
-
-        return
-
-
+    return
 
 def load_config_file(config_filename):
 
