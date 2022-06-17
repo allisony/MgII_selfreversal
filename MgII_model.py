@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from lmfit.model import save_modelresult, load_modelresult, save_model
 from matplotlib import rc
 import configparser
+import os
 
 plt.ion()
 
