@@ -61,7 +61,7 @@ def main(config_filename,fitting=True):
         save_fit_results(wavelength_array, flux_array, error_array, result)
 
 
-        return
+        return result
 
     else:
 
