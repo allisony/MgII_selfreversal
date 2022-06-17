@@ -29,9 +29,9 @@ mpl.rcParams['ytick.labelsize'] = label_size
 
 
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
+#rc('text', usetex=True)
 
-rc('text.latex', preamble=r'\usepackage[helvet]{sfmath}')
+#rc('text.latex', preamble=r'\usepackage[helvet]{sfmath}')
 
 def main(config_filename,fitting=True):
 
@@ -75,8 +75,14 @@ def main(config_filename,fitting=True):
 
 def load_config_file(config_filename):
 
-    config = configparser.ConfigParser()
-    config.read(config_filename)
+    if os.path.isfile(config_filename):
+
+        config = configparser.ConfigParser()
+        config.read(config_filename)
+
+    else:
+
+        print("Config file not found")
     
     return config
 
