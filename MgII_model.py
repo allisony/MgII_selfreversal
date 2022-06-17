@@ -67,7 +67,7 @@ def main(config_filename,fitting=True):
 
         make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_model_profile)
 
-        return
+        return result
 
 
 
