@@ -20,9 +20,6 @@ ccgs = 2.99792458e10 # cm/s, speed of light
 me = 9.1093897e-28 # g, electron mass
 e = 4.8032068e-10 # esu, electron charge
 
-rc('font',**{'family':'sans-serif'})
-rc('text', usetex=True)
-
 import matplotlib as mpl
 label_size = 16
 mpl.rcParams['xtick.labelsize'] = label_size 
