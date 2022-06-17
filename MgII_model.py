@@ -193,6 +193,7 @@ def make_diagnostic_fit_figure(wavelength_array,flux_array,error_array,initial_m
     plt.xlabel('Wavelength (A)',fontsize=18)
     plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
     plt.tight_layout()
+    plt.ticklabel_format(useOffset=False)
 
     return
 
@@ -208,6 +209,7 @@ def make_and_save_fit_figure(wavelength_array,flux_array,error_array,result):
     plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
     plt.title(star_name,fontsize=18)
     plt.tight_layout()
+    plt.ticklabel_format(useOffset=False)
     plt.savefig(save_path+star_name+'_bestfit.png')
 
     return
