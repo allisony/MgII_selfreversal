@@ -100,7 +100,7 @@ def get_parameter_hints(model):
                min=config['Parameter hints'].getfloat('fw_L min'), 
                max=config['Parameter hints'].getfloat('fw_L max'), 
                vary=config['Parameter hints'].getboolean('fw_L vary')) 
-    model.set_param_hint('fw_G',value=config['Parameter hints'].getfloat('vs value'), 
+    model.set_param_hint('fw_G',value=config['Parameter hints'].getfloat('fw_G value'), 
                min=config['Parameter hints'].getfloat('fw_G min'), 
                max=config['Parameter hints'].getfloat('fw_G max'), 
                vary=config['Parameter hints'].getboolean('fw_G vary')) 
