@@ -92,79 +92,14 @@ def get_parameter_hints(model):
     for key in config['Parameter hints']:
         parameter_name_list = np.append(parameter_name_list, key.split(' ')[0])
 
+    parameter_name_list_unique = np.unique(parameter_name_list)
 
+    for parameter in parameter_name_list_unique:
 
-    model.set_param_hint('vs',value=config['Parameter hints'].getfloat('vs value'), 
-               min=config['Parameter hints'].getfloat('vs min'), 
-               max=config['Parameter hints'].getfloat('vs max'), 
-               vary=config['Parameter hints'].getboolean('vs vary')) 
-    model.set_param_hint('am',value=config['Parameter hints'].getfloat('am value'), 
-               min=config['Parameter hints'].getfloat('am min'), 
-               max=config['Parameter hints'].getfloat('am max'), 
-               vary=config['Parameter hints'].getboolean('am vary')) 
-    model.set_param_hint('fw_L',value=config['Parameter hints'].getfloat('fw_L value'), 
-               min=config['Parameter hints'].getfloat('fw_L min'), 
-               max=config['Parameter hints'].getfloat('fw_L max'), 
-               vary=config['Parameter hints'].getboolean('fw_L vary')) 
-    model.set_param_hint('fw_G',value=config['Parameter hints'].getfloat('fw_G value'), 
-               min=config['Parameter hints'].getfloat('fw_G min'), 
-               max=config['Parameter hints'].getfloat('fw_G max'), 
-               vary=config['Parameter hints'].getboolean('fw_G vary')) 
-    model.set_param_hint('p',value=config['Parameter hints'].getfloat('p value'), 
-               min=config['Parameter hints'].getfloat('p min'), 
-               max=config['Parameter hints'].getfloat('p max'), 
-               vary=config['Parameter hints'].getboolean('p vary')) 
-    model.set_param_hint('vs_rev',value=config['Parameter hints'].getfloat('vs_rev value'), 
-               min=config['Parameter hints'].getfloat('vs_rev min'), 
-               max=config['Parameter hints'].getfloat('vs_rev max'), 
-               vary=config['Parameter hints'].getboolean('vs_rev vary')) 
-
-    model.set_param_hint('mg2_col',value=config['Parameter hints'].getfloat('mg2_col value'), 
-               min=config['Parameter hints'].getfloat('mg2_col min'), 
-               max=config['Parameter hints'].getfloat('mg2_col max'), 
-               vary=config['Parameter hints'].getboolean('mg2_col vary')) 
-    model.set_param_hint('mg2_b',value=config['Parameter hints'].getfloat('mg2_b value'), 
-               min=config['Parameter hints'].getfloat('mg2_b min'), 
-               max=config['Parameter hints'].getfloat('mg2_b max'), 
-               vary=config['Parameter hints'].getboolean('mg2_b vary')) 
-    model.set_param_hint('mg2_vel',value=config['Parameter hints'].getfloat('mg2_vel value'), 
-               min=config['Parameter hints'].getfloat('mg2_vel min'), 
-               max=config['Parameter hints'].getfloat('mg2_vel max'), 
-               vary=config['Parameter hints'].getboolean('mg2_vel vary')) 
-
-    model.set_param_hint('mg2_col2',value=config['Parameter hints'].getfloat('mg2_col2 value'), 
-               min=config['Parameter hints'].getfloat('mg2_col2 min'), 
-               max=config['Parameter hints'].getfloat('mg2_col2 max'), 
-               vary=config['Parameter hints'].getboolean('mg2_col2 vary')) 
-    model.set_param_hint('mg2_b2',value=config['Parameter hints'].getfloat('mg2_b2 value'), 
-               min=config['Parameter hints'].getfloat('mg2_b2 min'), 
-               max=config['Parameter hints'].getfloat('mg2_b2 max'), 
-               vary=config['Parameter hints'].getboolean('mg2_b2 vary')) 
-    model.set_param_hint('mg2_vel2',value=config['Parameter hints'].getfloat('mg2_vel2 value'), 
-               min=config['Parameter hints'].getfloat('mg2_vel2 min'), 
-               max=config['Parameter hints'].getfloat('mg2_vel2 max'), 
-               vary=config['Parameter hints'].getboolean('mg2_vel2 vary')) 
-
-    model.set_param_hint('c0',value=config['Parameter hints'].getfloat('c0 value'), 
-               min=config['Parameter hints'].getfloat('c0 min'), 
-               max=config['Parameter hints'].getfloat('c0 max'), 
-               vary=config['Parameter hints'].getboolean('c0 vary')) 
-    model.set_param_hint('c1',value=config['Parameter hints'].getfloat('c1 value'), 
-               min=config['Parameter hints'].getfloat('c1 min'), 
-               max=config['Parameter hints'].getfloat('c1 max'), 
-               vary=config['Parameter hints'].getboolean('c1 vary')) 
-    model.set_param_hint('c2',value=config['Parameter hints'].getfloat('c2 value'), 
-               min=config['Parameter hints'].getfloat('c2 min'), 
-               max=config['Parameter hints'].getfloat('c2 max'), 
-               vary=config['Parameter hints'].getboolean('c2 vary')) 
-    model.set_param_hint('c3',value=config['Parameter hints'].getfloat('c3 value'), 
-               min=config['Parameter hints'].getfloat('c3 min'), 
-               max=config['Parameter hints'].getfloat('c3 max'), 
-               vary=config['Parameter hints'].getboolean('c3 vary')) 
-    model.set_param_hint('c4',value=config['Parameter hints'].getfloat('c4 value'), 
-               min=config['Parameter hints'].getfloat('c4 min'), 
-               max=config['Parameter hints'].getfloat('c4 max'), 
-               vary=config['Parameter hints'].getboolean('c4 vary')) 
+        model.set_param_hint(parameter, value = config['Parameter hints'].getfloat( parameter + ' value' ),
+               min=config['Parameter hints'].getfloat(parameter + ' min'), 
+               max=config['Parameter hints'].getfloat(parameter + ' max'), 
+               vary=config['Parameter hints'].getboolean(parameter + ' vary')
 
     params = model.make_params()
     model.print_param_hints()
