@@ -99,7 +99,7 @@ def get_parameter_hints(model):
         model.set_param_hint(parameter, value = config['Parameter hints'].getfloat( parameter + ' value' ),
                min=config['Parameter hints'].getfloat(parameter + ' min'), 
                max=config['Parameter hints'].getfloat(parameter + ' max'), 
-               vary=config['Parameter hints'].getboolean(parameter + ' vary')
+               vary=config['Parameter hints'].getboolean(parameter + ' vary') )
 
     params = model.make_params()
     model.print_param_hints()
