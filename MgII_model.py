@@ -88,6 +88,12 @@ def load_config_file(config_filename):
 
 def get_parameter_hints(model):
 
+    parameter_name_list = []
+    for key in config['Parameter hints']:
+        parameter_name_list = np.append(parameter_name_list, key.split(' ')[0])
+
+
+
     model.set_param_hint('vs',value=config['Parameter hints'].getfloat('vs value'), 
                min=config['Parameter hints'].getfloat('vs min'), 
                max=config['Parameter hints'].getfloat('vs max'), 
