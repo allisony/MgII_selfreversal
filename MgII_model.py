@@ -156,18 +156,9 @@ def make_and_save_fit_figure(wavelength_array,flux_array,error_array,result):
     save_path = config['Star and data properties'].get('save path')
     star_name = config['Star and data properties'].get('star name')
 
-    stellar_intrinsic_profile, continuum_profile, ism_attenuation, ism_attenuation2, ism_attenuation3 \
+    stellar_intrinsic_profile, continuum_profile, ism_attenuation, ism_attenuation2, ism_attenuation3, \
             stellar_observed_profile, stellar_observed_profile_convolved = \
-                                        my_model(wavelength_array, vs=result.best_values['vs'], 
-                                        am=result.best_values['am'], fw_L=result.best_values['fw_L'], 
-                                        fw_G=result.best_values['fw_G'], p=result.best_values['p'], 
-                                        vs_rev=result.best_values['vs_rev'], mg2_col=result.best_values['mg2_col'], 
-                                        mg2_b=result.best_values['mg2_b'], mg2_vel=result.best_values['mg2_vel'], 
-                                        mg2_col2=result.best_values['mg2_col2'], mg2_b2=result.best_values['mg2_b2'], 
-                                        mg2_vel2=result.best_values['mg2_vel2'], c0=result.best_values['c0'], 
-                                        c1=result.best_values['c1'], c2=result.best_values['c2'], 
-                                        c3=result.best_values['c3'], c4=result.best_values['c4'], fitting=False)
-
+                                        my_model(wavelength_array, **result.best_values, fitting=False)
 
     plt.figure()
     plt.errorbar(wavelength_array,flux_array,yerr=error_array,color='k',label='data')
@@ -177,6 +168,7 @@ def make_and_save_fit_figure(wavelength_array,flux_array,error_array,result):
     plt.twinx()
     plt.plot(wavelength_array, ism_attenuation, color='grey', linestyle=':')
     plt.plot(wavelength_array, ism_attenuation2, color='grey', linestyle='--')
+    plt.plot(wavelength_array, ism_attenuation3, color='grey', linestyle='-.')
     plt.plot(wavelength_array, stellar_intrinsic_profile, color='blue', linestyle='--')
     plt.plot(wavelength_array, continuum_profile, color='dodgerblue',linestyle='--', alpha=0.5)
     plt.title(star_name,fontsize=18)
@@ -194,18 +186,9 @@ def save_fit_results(wavelength_array, flux_array, error_array, result):
     with open(save_path+star_name+'_result.txt', 'w') as fh:
         fh.write(result.fit_report())
 
-    stellar_intrinsic_profile, continuum_profile, ism_attenuation, ism_attenuation2, \
+    stellar_intrinsic_profile, continuum_profile, ism_attenuation, ism_attenuation2, ism_attenuation3, \
             stellar_observed_profile, stellar_observed_profile_convolved = \
-                                        my_model(wavelength_array, vs=result.best_values['vs'], 
-                                        am=result.best_values['am'], fw_L=result.best_values['fw_L'], 
-                                        fw_G=result.best_values['fw_G'], p=result.best_values['p'], 
-                                        vs_rev=result.best_values['vs_rev'], mg2_col=result.best_values['mg2_col'], 
-                                        mg2_b=result.best_values['mg2_b'], mg2_vel=result.best_values['mg2_vel'], 
-                                        mg2_col2=result.best_values['mg2_col2'], mg2_b2=result.best_values['mg2_b2'], 
-                                        mg2_vel2=result.best_values['mg2_vel2'], c0=result.best_values['c0'], 
-                                        c1=result.best_values['c1'], c2=result.best_values['c2'], 
-                                        c3=result.best_values['c3'], c4=result.best_values['c4'], fitting=False)
-
+                                        my_model(wavelength_array, **result.best_values, fitting=False)
 
     ## save data and fit lines to file
     df_to_save = pd.DataFrame(data={'wavelength_array': wavelength_array, 
@@ -219,6 +202,8 @@ def save_fit_results(wavelength_array, flux_array, error_array, result):
                                 'ism_attenuation2': ism_attenuation2,
                                 'stellar_intrinsic_profile': stellar_intrinsic_profile
                                 })
+
+    #if result.best_values['mg2_col3'] > 0:
     df_to_save.to_csv(save_path+star_name+'_bestfit_lines.csv')
 
     return
@@ -259,7 +244,7 @@ def my_model(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg
           
     else:
         
-        return stellar_intrinsic_profile, continuum_profile, ism_attenuation, ism_attenuation2, stellar_observed_profile, stellar_observed_profile_convolved
+        return stellar_intrinsic_profile, continuum_profile, ism_attenuation, ism_attenuation2, ism_attenuation3, stellar_observed_profile, stellar_observed_profile_convolved
 
 
 def make_resolution_variable(wavelength_array, index=1, lsf_filename='STIS_E230H_240nm_LSF.dat'):
