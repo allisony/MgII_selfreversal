@@ -108,7 +108,6 @@ def get_parameter_hints(model):
                max=config['Parameter hints'].getfloat(parameter + ' max'), 
                vary=config['Parameter hints'].getboolean(parameter + ' vary') )
 
-        #print(parameter, config['Parameter hints'].getfloat( parameter + ' value' ))
 
 
     params = model.make_params()
