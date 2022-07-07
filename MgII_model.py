@@ -92,19 +92,31 @@ def get_parameter_hints(model):
     for key in config['Parameter hints']:
         parameter_name_list = np.append(parameter_name_list, key.split(' ')[0])
 
-    parameter_name_list_unique = np.unique(parameter_name_list)
+    parameter_name_list_unique, index = np.unique(parameter_name_list, return_index=True)
 
-    for parameter in parameter_name_list_unique:
+    parameter_name_list_unique_sorted = parameter_name_list[np.sort(index)]
+
+    for parameter in parameter_name_list_unique_sorted:
+
+        if parameter == "fw_l":
+            parameter = "fw_L"
+        elif parameter == "fw_g":
+            parameter = "fw_G"
 
         model.set_param_hint(parameter, value = config['Parameter hints'].getfloat( parameter + ' value' ),
                min=config['Parameter hints'].getfloat(parameter + ' min'), 
                max=config['Parameter hints'].getfloat(parameter + ' max'), 
                vary=config['Parameter hints'].getboolean(parameter + ' vary') )
 
+        #print(parameter, config['Parameter hints'].getfloat( parameter + ' value' ))
+
+
     params = model.make_params()
     model.print_param_hints()
 
     return model, params
+
+
 
 def read_data():
 
