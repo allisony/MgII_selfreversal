@@ -200,6 +200,7 @@ def save_fit_results(wavelength_array, flux_array, error_array, result):
                                 'continuum_profile': continuum_profile,
                                 'ism_attenuation': ism_attenuation,
                                 'ism_attenuation2': ism_attenuation2,
+                                'ism_attenuation3': ism_attenuation3,
                                 'stellar_intrinsic_profile': stellar_intrinsic_profile
                                 })
 
