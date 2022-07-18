@@ -163,14 +163,14 @@ def make_and_save_fit_figure(wavelength_array,flux_array,error_array,result):
     plt.figure()
     plt.errorbar(wavelength_array,flux_array,yerr=error_array,color='k',label='data')
     plt.plot(wavelength_array, result.best_fit, color='deeppink', linewidth=2, alpha=0.7)
+    plt.plot(wavelength_array, stellar_intrinsic_profile, color='blue', linestyle='--')
+    plt.plot(wavelength_array, continuum_profile, color='dodgerblue',linestyle='--', alpha=0.5)
     plt.xlabel('Wavelength (A)',fontsize=18)
     plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
     plt.twinx()
     plt.plot(wavelength_array, ism_attenuation, color='grey', linestyle=':')
     plt.plot(wavelength_array, ism_attenuation2, color='grey', linestyle='--')
     plt.plot(wavelength_array, ism_attenuation3, color='grey', linestyle='-.')
-    plt.plot(wavelength_array, stellar_intrinsic_profile, color='blue', linestyle='--')
-    plt.plot(wavelength_array, continuum_profile, color='dodgerblue',linestyle='--', alpha=0.5)
     plt.title(star_name,fontsize=18)
     plt.tight_layout()
     plt.ticklabel_format(useOffset=False)
@@ -208,6 +208,33 @@ def save_fit_results(wavelength_array, flux_array, error_array, result):
     df_to_save.to_csv(save_path+star_name+'_bestfit_lines.csv')
 
     return
+
+def create_subplot_for_paper(filename):
+
+
+    df = pd.read_csv(filename)
+
+
+    plt.figure()
+    plt.errorbar(df['wavelength_array'],df['flux_array'],yerr=df['error_array'],color='k',label='data')
+    plt.plot(df['wavelength_array'], df['best_fit_model'], color='deeppink', linewidth=2, alpha=0.7)
+    plt.plot(df['wavelength_array'], df['continuum_profile'], color='dodgerblue',linestyle='--', alpha=0.5)
+    plt.plot(df['wavelength_array'], df['stellar_intrinsic_profile'], color='blue', linestyle='--')
+
+    plt.xlabel('Wavelength (A)',fontsize=18)
+    plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
+    plt.twinx()
+    plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle=':')
+    plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle='--')
+    plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle='-.')
+    
+    plt.title(star_name,fontsize=18)
+    plt.tight_layout()
+    plt.ticklabel_format(useOffset=False)
+
+    return
+
+
 
 
 def my_model(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg2_vel, mg2_col2, mg2_b2, mg2_vel2, c0, c1, c2, c3, c4, mg2_col3=0, mg2_b3=2.0, mg2_vel3 = 0, fitting=True, convolve=True): 
