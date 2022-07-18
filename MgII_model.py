@@ -163,7 +163,7 @@ def make_and_save_fit_figure(wavelength_array,flux_array,error_array,result):
     plt.figure()
     plt.errorbar(wavelength_array,flux_array,yerr=error_array,color='k',label='data')
     plt.plot(wavelength_array, result.best_fit, color='deeppink', linewidth=2, alpha=0.7)
-    plt.plot(wavelength_array, stellar_intrinsic_profile, color='blue', linestyle='--')
+    plt.plot(wavelength_array, stellar_intrinsic_profile + continuum_profile, color='blue', linestyle='--')
     plt.plot(wavelength_array, continuum_profile, color='dodgerblue',linestyle='--', alpha=0.5)
     plt.xlabel('Wavelength (A)',fontsize=18)
     plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
