@@ -171,6 +171,7 @@ def make_and_save_fit_figure(wavelength_array,flux_array,error_array,result):
     plt.plot(wavelength_array, ism_attenuation, color='grey', linestyle=':')
     plt.plot(wavelength_array, ism_attenuation2, color='grey', linestyle='--')
     plt.plot(wavelength_array, ism_attenuation3, color='grey', linestyle='-.')
+    plt.ylim([0,1])
     plt.title(star_name,fontsize=18)
     plt.tight_layout()
     plt.ticklabel_format(useOffset=False)
