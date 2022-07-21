@@ -1,4 +1,4 @@
-from astropy.modeling.models import Voigt1D
+from astropy.modeling.models import Voigt1D, Gaussian1D
 from numpy.polynomial import Polynomial
 from lyapy import voigt ## this is my voigt.py file
 import numpy as np
@@ -290,11 +290,24 @@ def intrinsic_stellar_emission_line(wavelength_array, vs, am, fw_L, fw_G, p, vs_
 
     sigma_G = fw_G/c_kms * mgii_k_line_center # convert Gaussian FWHM of the Voigt profile from km/s to Angstroms
     sigma_L = fw_L/c_kms * mgii_k_line_center # convert Lorentzian FWHM of the Voigt profile from km/s to Angstroms
-                                           
 
-    voigt_profile_func = Voigt1D(x_0 = line_center, amplitude_L = 10**am, fwhm_L = sigma_L, fwhm_G = sigma_G)
+    if fw_L == -999:
 
-    voigt_profile_func_rev = Voigt1D(x_0 = line_center_rev, amplitude_L = 10**am, fwhm_L = sigma_L, fwhm_G = sigma_G)
+        Gaussian = True
+
+    else: 
+
+        Gaussian = False
+
+    if Gaussian:
+
+        voigt_profile_func = Gaussian1D(amplitude = 10**am, mean = line_center, stddev = sigma_G / (2.*np.sqrt(2.*np.log(2))) )
+        voigt_profile_func_rev = Gaussian1D(amplitude = 10**am, mean = line_center_rev, stddev = sigma_G / (2.*np.sqrt(2.*np.log(2))) )
+
+    else:
+                                        
+        voigt_profile_func = Voigt1D(x_0 = line_center, amplitude_L = 10**am, fwhm_L = sigma_L, fwhm_G = sigma_G)
+        voigt_profile_func_rev = Voigt1D(x_0 = line_center_rev, amplitude_L = 10**am, fwhm_L = sigma_L, fwhm_G = sigma_G)
 
     self_reversal =  np.exp(-p * voigt_profile_func_rev(wavelength_array) / np.max(voigt_profile_func_rev(wavelength_array)))
 
