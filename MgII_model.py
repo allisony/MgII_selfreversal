@@ -14,7 +14,6 @@ import os
 plt.ion()
 
 mgii_k_line_center = 2796.3543 # Angstroms, vacuum wavelength, reference: Morton 2003
-mgii_h_line_center = 2803.5315 # Angstrom, vacuum wavelength, reference: Morton 2003
 c_kms = 2.99792458e5 # km/s, speed of light
 c_km = 2.99792458e5 # km/s, speed of light
 ccgs = 2.99792458e10 # cm/s, speed of light
@@ -245,7 +244,7 @@ def my_model(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg
 
 
     ##### constructing the intrinsic stellar emission line ##################################################################
-    stellar_intrinsic_profile = intrinsic_stellar_emission_line(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, which_line = which_line)
+    stellar_intrinsic_profile = intrinsic_stellar_emission_line(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev)
     #########################################################################################################################
 
     #### constructing the stellar continuum ################################################################################
@@ -284,18 +283,13 @@ def make_resolution_variable(wavelength_array, index=1, lsf_filename='STIS_E230H
     resolution = lyapy.ready_stis_lsf(stis_lsf[:,0],stis_lsf[:,index],stis_dispersion,wavelength_array)
     return resolution
 
-def intrinsic_stellar_emission_line(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, which_line='k'):
+def intrinsic_stellar_emission_line(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev):
 
-    if which_line=='k':
-        mgii_line_center = mgii_k_line_center
-    else:
-        mgii_line_center = mgii_h_line_center
+    line_center = (vs/c_kms + 1.) * mgii_k_line_center # convert stellar radial velocity (km/s) to wavelength units (Angstroms)
+    line_center_rev = ((vs + vs_rev)/c_kms + 1.) * mgii_k_line_center # convert self-reversal radial velocity (km/s) to wavelength units (Angstroms)
 
-    line_center = (vs/c_kms + 1.) * mgii_line_center # convert stellar radial velocity (km/s) to wavelength units (Angstroms)
-    line_center_rev = ((vs + vs_rev)/c_kms + 1.) * mgii_line_center # convert self-reversal radial velocity (km/s) to wavelength units (Angstroms)
-
-    sigma_G = fw_G/c_kms * mgii_line_center # convert Gaussian FWHM of the Voigt profile from km/s to Angstroms
-    sigma_L = fw_L/c_kms * mgii_line_center # convert Lorentzian FWHM of the Voigt profile from km/s to Angstroms
+    sigma_G = fw_G/c_kms * mgii_k_line_center # convert Gaussian FWHM of the Voigt profile from km/s to Angstroms
+    sigma_L = fw_L/c_kms * mgii_k_line_center # convert Lorentzian FWHM of the Voigt profile from km/s to Angstroms
 
     if fw_L == -999:
 
@@ -381,9 +375,9 @@ def tau_profile_mgii(ncols,vshifts,vdop,which_line):
     """
 
     if which_line == 'k':
-        lam0s,fs,gammas=mgii_k_line_center,6.155E-01,2.625E+08 
+        lam0s,fs,gammas=2796.3543,6.155E-01,2.625E+08 
     elif which_line == 'h':
-        lam0s,fs,gammas=mgii_h_line_center,3.058E-01,2.595E+08
+        lam0s,fs,gammas=2803.5315,3.058E-01,2.595E+08
     else:
         raise ValueError("which_line can only equal 'k' or 'h'!")
 
