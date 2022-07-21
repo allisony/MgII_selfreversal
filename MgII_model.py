@@ -238,7 +238,7 @@ def create_subplot_for_paper(filename):
 
 
 
-def my_model(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg2_vel, mg2_col2, mg2_b2, mg2_vel2, c0, c1, c2, c3, c4, mg2_col3=0, mg2_b3=2.0, mg2_vel3 = 0, fitting=True, convolve=True): 
+def my_model(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg2_vel, mg2_col2, mg2_b2, mg2_vel2, c0, c1, c2, c3, c4, mg2_col3=0, mg2_b3=2.0, mg2_vel3 = 0, fitting=True, convolve=True, which_line='h'): 
     
     print(vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg2_vel, mg2_col2, mg2_b2, mg2_vel2, c0, c1, c2, c3, c4, mg2_col3, mg2_b3, mg2_vel3)
 
@@ -253,9 +253,9 @@ def my_model(wavelength_array, vs, am, fw_L, fw_G, p, vs_rev, mg2_col, mg2_b, mg
 
     #### construct the observed stellar emission line (i.e., attenuated by the ISM)##########################################
     #print('my_model mg2_b, mg2_b2 = ' + str(mg2_b) + ', '+ str(mg2_b2))
-    ism_attenuation = total_tau_profile_func_mgii(wavelength_array,mg2_col, mg2_b, mg2_vel,which_line='k')
-    ism_attenuation2 = total_tau_profile_func_mgii(wavelength_array,mg2_col2, mg2_b2, mg2_vel2,which_line='k')
-    ism_attenuation3 = total_tau_profile_func_mgii(wavelength_array,mg2_col3, mg2_b3, mg2_vel3,which_line='k')
+    ism_attenuation = total_tau_profile_func_mgii(wavelength_array,mg2_col, mg2_b, mg2_vel,which_line=which_line)
+    ism_attenuation2 = total_tau_profile_func_mgii(wavelength_array,mg2_col2, mg2_b2, mg2_vel2,which_line=which_line)
+    ism_attenuation3 = total_tau_profile_func_mgii(wavelength_array,mg2_col3, mg2_b3, mg2_vel3,which_line=which_line)
 
     stellar_observed_profile = attenuate_stellar_emission_line(stellar_intrinsic_profile + continuum_profile, 
                                                                ism_attenuation * ism_attenuation2 * ism_attenuation3)
