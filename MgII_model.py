@@ -10,6 +10,7 @@ from lmfit.model import save_modelresult, load_modelresult, save_model
 from matplotlib import rc
 import configparser
 import os
+import glob
 
 plt.ion()
 
@@ -210,28 +211,38 @@ def save_fit_results(wavelength_array, flux_array, error_array, result):
 
     return
 
-def create_subplot_for_paper(filename):
+def create_subplot_for_paper():
+
+    for i, fn in enumerate( glob.glob('*bestfit_lines.csv') ):
+
+        df = pd.read_csv(fn)
+        star_name = fn.split('_')[0]
 
 
-    df = pd.read_csv(filename)
+        plt.figure()
+        plt.errorbar(df['wavelength_array'],df['flux_array'],yerr=df['error_array'],color='k',label='data')
+        plt.plot(df['wavelength_array'], df['best_fit_model'], color='deeppink', linewidth=2, alpha=0.7)
+        plt.plot(df['wavelength_array'], df['continuum_profile'], color='dodgerblue',linestyle='--', alpha=0.5)
+        plt.plot(df['wavelength_array'], df['stellar_intrinsic_profile'] + df['continuum_profile'], color='blue', linestyle='--')
+
+        plt.xlabel('Wavelength (A)',fontsize=18)
+        plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
+        plt.twinx()
+        plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle=':')
+        plt.plot(df['wavelength_array'], df['ism_attenuation2'], color='grey', linestyle='--')
+        if 'ism_attenuation3' in df.columns:
+            plt.plot(df['wavelength_array'], df['ism_attenuation3'], color='grey', linestyle='-.')
+
+        plt.ylim([0,1])
+        
+        plt.title(star_name,fontsize=18)
+        plt.tight_layout()
+        plt.ticklabel_format(useOffset=False)
+
+        plt.savefig('final_bestfits/' + star_name + '.png')
+        plt.close()
 
 
-    plt.figure()
-    plt.errorbar(df['wavelength_array'],df['flux_array'],yerr=df['error_array'],color='k',label='data')
-    plt.plot(df['wavelength_array'], df['best_fit_model'], color='deeppink', linewidth=2, alpha=0.7)
-    plt.plot(df['wavelength_array'], df['continuum_profile'], color='dodgerblue',linestyle='--', alpha=0.5)
-    plt.plot(df['wavelength_array'], df['stellar_intrinsic_profile'], color='blue', linestyle='--')
-
-    plt.xlabel('Wavelength (A)',fontsize=18)
-    plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
-    plt.twinx()
-    plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle=':')
-    plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle='--')
-    plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle='-.')
-    
-    plt.title(star_name,fontsize=18)
-    plt.tight_layout()
-    plt.ticklabel_format(useOffset=False)
 
     return
 
