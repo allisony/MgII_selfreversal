@@ -211,40 +211,6 @@ def save_fit_results(wavelength_array, flux_array, error_array, result):
 
     return
 
-def create_subplot_for_paper():
-
-    for i, fn in enumerate( glob.glob('*bestfit_lines.csv') ):
-
-        df = pd.read_csv(fn)
-        star_name = fn.split('_')[0]
-
-
-        plt.figure()
-        plt.errorbar(df['wavelength_array'],df['flux_array'],yerr=df['error_array'],color='k',label='data')
-        plt.plot(df['wavelength_array'], df['best_fit_model'], color='deeppink', linewidth=2, alpha=0.7)
-        plt.plot(df['wavelength_array'], df['continuum_profile'], color='dodgerblue',linestyle='--', alpha=0.5)
-        plt.plot(df['wavelength_array'], df['stellar_intrinsic_profile'] + df['continuum_profile'], color='blue', linestyle='--')
-
-        plt.xlabel('Wavelength (A)',fontsize=18)
-        plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
-        plt.twinx()
-        plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle=':')
-        plt.plot(df['wavelength_array'], df['ism_attenuation2'], color='grey', linestyle='--')
-        if 'ism_attenuation3' in df.columns:
-            plt.plot(df['wavelength_array'], df['ism_attenuation3'], color='grey', linestyle='-.')
-
-        plt.ylim([0,1])
-        
-        plt.title(star_name,fontsize=18)
-        plt.tight_layout()
-        plt.ticklabel_format(useOffset=False)
-
-        plt.savefig('final_bestfits/' + star_name + '.png')
-        plt.close()
-
-
-
-    return
 
 
 
@@ -442,3 +408,148 @@ def tau_profile_mgii(ncols,vshifts,vdop,which_line):
     tau_all = np.interp(wave_all,wave_symmetrical+lamshifts,xsections_symmetrical*Ntot)
 
     return wave_all,tau_all
+
+
+
+def create_subplot_for_paper():
+
+    for i, fn in enumerate( glob.glob('*bestfit_lines.csv') ):
+
+        df = pd.read_csv(fn)
+        star_name = fn.split('_')[0]
+
+
+        plt.figure()
+        plt.errorbar(df['wavelength_array'],df['flux_array'],yerr=df['error_array'],color='k',label='data')
+        plt.plot(df['wavelength_array'], df['best_fit_model'], color='deeppink', linewidth=2, alpha=0.7)
+        plt.plot(df['wavelength_array'], df['continuum_profile'], color='dodgerblue',linestyle='--', alpha=0.5)
+        plt.plot(df['wavelength_array'], df['stellar_intrinsic_profile'] + df['continuum_profile'], color='blue', linestyle='--')
+
+        plt.xlabel('Wavelength (A)',fontsize=18)
+        plt.ylabel('Flux Density (erg/cm2/s/A)',fontsize=18)
+        plt.twinx()
+        plt.plot(df['wavelength_array'], df['ism_attenuation'], color='grey', linestyle=':')
+        plt.plot(df['wavelength_array'], df['ism_attenuation2'], color='grey', linestyle='--')
+        if 'ism_attenuation3' in df.columns:
+            plt.plot(df['wavelength_array'], df['ism_attenuation3'], color='grey', linestyle='-.')
+
+        plt.ylim([0,1])
+        
+        plt.title(star_name,fontsize=18)
+        plt.tight_layout()
+        plt.ticklabel_format(useOffset=False)
+
+        plt.savefig('final_bestfits/' + star_name + '.png')
+        plt.close()
+
+
+
+    return
+
+
+def print_p_values_for_table():
+
+
+    sheet_url = "https://docs.google.com/spreadsheets/d/1OSUtyEspK6-1ejrm5Z3uTgnh8cNCQXTY-oVBoSw4eZY/edit#gid=582801810"
+    df = pd.read_csv(sheet_url.replace('/edit#gid=', '/export?format=csv&gid='))
+
+    new_colnames = ['vs', 'am', 'fw_L', 'fw_G', 'p', 'vs_rev', 'mg2_col', 'mg2_b', 'mg2_vel', 'mg2_col2', 'mg2_b2', 'mg2_vel2',
+                    'c0', 'c1', 'c2', 'c3', 'c4', 'mg2_col3', 'mg2_b3', 'mg2_vel3']
+
+    colnames = new_colnames.copy()
+    kk=0
+    for k in range(len(colnames)):
+
+        colnames.insert(kk+1, colnames[kk] + '_err')
+        kk+=2
+
+    df['reduced chi-square'] = 0
+    
+
+    table = []
+    column_row = colnames
+    table.append(column_row)
+
+    for i in range(len(df)):
+
+       starname = df['MgII spectrum filename'].loc[i].replace('.txt','')
+
+       output_table_row = []
+
+       try:
+        with open(starname + '_result.txt') as f:
+            contents = f.readlines()
+        
+
+        ## now let's grab the parameters we want to store! 
+
+        list_of_string = [i for i in contents if "reduced chi-square" in i] # search for which string in the 
+                                                                            # list (contents) has the substring ("reduced chi-square")
+        reduced_chi_square = float(list_of_string[0].split("=")[1].replace("\n",""))
+        df['reduced chi-square'].loc[i] = reduced_chi_square
+
+        with open(starname + '_result.txt') as f:
+            contents = f.readlines()
+
+
+        for j in range(len(new_colnames)):
+
+            list_of_string = [i for i in contents if (new_colnames[j]+':') in i]
+
+            if len(list_of_string) == 0:
+
+                value = "fixed"
+                error = "fixed"
+
+            elif len(list_of_string) > 1:
+
+                value = float(list_of_string[1][14:26])
+                error = "at boundary"
+
+
+
+            elif "fixed" in list_of_string[0]:
+
+                value = list_of_string[0].split(':')[1].split('(fixed)\n')[0]
+                error = "fixed"
+
+            elif "+/-" not in list_of_string[0]:
+
+                value = float(list_of_string[0][14:26])
+                error = "not determined"
+
+
+            else:
+
+                value = float(list_of_string[0][14:26])
+                error = float(list_of_string[0][30:41])
+
+            output_table_row.append(value)
+            output_table_row.append(error)
+
+        table.append(output_table_row)
+
+       except:
+           output_table_row = np.zeros(len(colnames)) 
+           table.append(output_table_row)
+
+
+    df_new = pd.DataFrame(table[1:], columns = table[0])
+
+    df_to_save = pd.concat([df, df_new],axis=1)
+
+    return df_to_save
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
