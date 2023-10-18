@@ -31,15 +31,14 @@ for i,fn in enumerate(glob.glob(path + '*result.txt')):
                 if "(fixed)" not in line:
 
                     value = float(line.split(' ')[-7])
-                    #value_err = float(line.split(' ')[-5])
-                    print(value)#, value_err)
+                    print(value)
 
                 else:
 
 
-                    value = float(line.split(' ')[-2])#np.nan
-                    #vs_rev_err = np.nan
+                    value = float(line.split(' ')[-2])
 
+                    
                 df[parameter].loc[i] = value
 
 
